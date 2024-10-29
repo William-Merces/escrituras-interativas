@@ -1,98 +1,104 @@
 'use client'
 
-import LoadingSpinner from '@/components/shared/LoadingSpinner'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
+import LoadingSpinner from '../shared/LoadingSpinner'
 import { BookOpen, Map, MessageCircle, Activity } from 'lucide-react'
-import Overview from '@/components/dashboard-tabs/Overview'
-import Resources from '@/components/dashboard-tabs/Resources'
-import Discussions from '@/components/dashboard-tabs/Discussions'
 
-export default function Dashboard() {
-    const [activeTab, setActiveTab] = useState('overview')
+export default function DashboardComponent() {
     const [isLoading, setIsLoading] = useState(false)
-    const renderTabContent = () => {
-        switch (activeTab) {
-            case 'overview':
-                return <Overview />
-            case 'resources':
-                return <Resources />
-            case 'discussions':
-                return <Discussions />
-            default:
-                return <Overview />
-        }
+    
+    const handleAction = async () => {
+        setIsLoading(true)
+        // Simula uma ação que leva tempo
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        setIsLoading(false)
     }
 
+    const stats = [
+        {
+            title: 'Progresso Total',
+            value: '25%',
+            icon: Activity,
+            color: 'blue'
+        },
+        {
+            title: 'Atividades Completadas',
+            value: '12/48',
+            icon: BookOpen,
+            color: 'green'
+        },
+        {
+            title: 'Participações',
+            value: '8',
+            icon: MessageCircle,
+            color: 'purple'
+        }
+    ]
+
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Barra Superior */}
-            <header className="bg-white shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center">
+        <div className="space-y-6">
+            {/* Cards de Estatísticas */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {stats.map((stat, index) => (
+                    <motion.div
+                        key={stat.title}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="bg-white p-6 rounded-lg shadow-sm"
+                    >
                         <div className="flex items-center space-x-4">
-                            <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                                GS
+                            <div className={`p-3 rounded-full bg-${stat.color}-100`}>
+                                <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
                             </div>
                             <div>
-                                <h2 className="text-lg font-semibold">Gabriel Santos</h2>
-                                <p className="text-sm text-gray-500">Estudante</p>
+                                <p className="text-sm text-gray-500">{stat.title}</p>
+                                <p className="text-2xl font-semibold">{stat.value}</p>
                             </div>
                         </div>
-                        <div className="flex items-center space-x-4">
-                            <div className="text-right">
-                                <p className="text-sm font-medium">Próxima Aula</p>
-                                <p className="text-sm text-gray-500">Quarta, 20h</p>
-                            </div>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                                Entrar na Aula
-                            </button>
-                        </div>
-                    </div>
+                    </motion.div>
+                ))}
+            </div>
+
+            {/* Área de Ações */}
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-lg font-semibold mb-4">Ações Rápidas</h3>
+                <div className="space-y-4">
+                    <button
+                        onClick={handleAction}
+                        className="w-full flex items-center justify-center space-x-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <LoadingSpinner />
+                        ) : (
+                            <>
+                                <BookOpen className="w-5 h-5" />
+                                <span>Continuar Estudando</span>
+                            </>
+                        )}
+                    </button>
+
+                    <button
+                        onClick={handleAction}
+                        className="w-full flex items-center justify-center space-x-2 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                        disabled={isLoading}
+                    >
+                        <Map className="w-5 h-5" />
+                        <span>Ver Recursos</span>
+                    </button>
+
+                    <button
+                        onClick={handleAction}
+                        className="w-full flex items-center justify-center space-x-2 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+                        disabled={isLoading}
+                    >
+                        <MessageCircle className="w-5 h-5" />
+                        <span>Participar das Discussões</span>
+                    </button>
                 </div>
-            </header>
-
-            {/* Conteúdo Principal com Tabs */}
-            <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-                {/* Sistema de Navegação por Tabs */}
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
-                    <nav className="flex space-x-8 px-6 border-b" aria-label="Tabs">
-                        {[
-                            { name: 'Visão Geral', value: 'overview', icon: BookOpen },
-                            { name: 'Recursos', value: 'resources', icon: Map },
-                            { name: 'Discussões', value: 'discussions', icon: MessageCircle },
-                        ].map((tab) => (
-
-                            <button
-                                key={tab.value}
-                                onClick={async () => {
-                                    setIsLoading(true)
-                                    setActiveTab(tab.value)
-                                    // Simula um pequeno delay para mostrar o loading
-                                    await new Promise(resolve => setTimeout(resolve, 300))
-                                    setIsLoading(false)
-                                }}
-                                className={`
-        flex items-center space-x-2 py-4 px-1 border-b-2 text-sm font-medium
-        transition-all duration-200 ease-in-out
-        hover:bg-gray-50
-        ${activeTab === tab.value
-                                        ? 'border-blue-500 text-blue-600'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
-    `}
-                            >
-
-                                <tab.icon className="w-5 h-5" />
-                                <span>{tab.name}</span>
-                            </button>
-                        ))}
-                    </nav>
-
-                    {/* Área de Conteúdo */}
-                    <div className="p-6">
-                        {renderTabContent()}
-                    </div>
-                </div>
-            </main>
+            </div>
         </div>
     )
 }
