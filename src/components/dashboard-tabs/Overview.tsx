@@ -1,129 +1,126 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { BookOpen, Clock, Check } from 'lucide-react'
+import { BookOpen, Clock, Video, Check } from 'lucide-react'
+import Card from '../ui/Card'
+
+const nextActivities = [
+  {
+    title: "Leitura: Apocalipse 2:1-7",
+    type: "Preparação",
+    description: "Carta à Igreja de Éfeso",
+    due: "Hoje",
+    status: "pending",
+    icon: BookOpen
+  },
+  {
+    title: "Aula ao Vivo",
+    type: "Aula",
+    description: "Igreja de Éfeso e suas aplicações",
+    due: "Quarta, 20h",
+    status: "upcoming",
+    icon: Video
+  },
+  {
+    title: "Quiz: Símbolos em Apocalipse 1",
+    type: "Avaliação",
+    description: "Teste seu conhecimento",
+    due: "Sexta-feira",
+    status: "pending",
+    icon: Clock
+  }
+]
+
+const progressItems = [
+  { text: "Introdução ao Apocalipse", completed: true },
+  { text: "Visão do Cristo Glorificado", completed: true },
+  { text: "Igreja de Éfeso", completed: false },
+  { text: "Igreja de Esmirna", completed: false },
+]
 
 export default function Overview() {
-    const nextActivities = [
-        {
-            title: "Leitura: Apocalipse 2:1-7",
-            type: "Preparação",
-            due: "Hoje",
-            status: "pending"
-        },
-        {
-            title: "Quiz: Símbolos em Apocalipse 1",
-            type: "Avaliação",
-            due: "Amanhã",
-            status: "pending"
-        },
-        {
-            title: "Aula ao Vivo: Igreja de Éfeso",
-            type: "Aula",
-            due: "Quarta, 20h",
-            status: "upcoming"
-        }
-    ]
-
-    return (
-        <div className="space-y-8">
-            {/* Próximas Atividades */}
+  return (
+    <div className="space-y-6">
+      {/* Próximas Atividades */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4 dark:text-white">Próximas Atividades</h3>
+        <div className="space-y-3">
+          {nextActivities.map((activity, index) => (
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-xl shadow-sm p-6"
+              key={activity.title}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
             >
-                <h3 className="text-lg font-semibold mb-4">Próximas Atividades</h3>
-                <div className="space-y-4">
-                    {nextActivities.map((activity, index) => (
-                        <div
-                            key={index}
-                            className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                        >
-                            <div className="flex items-center space-x-4">
-                                <div className={`
-                  p-2 rounded-full
-                  ${activity.status === 'pending' ? 'bg-yellow-100' : 'bg-blue-100'}
-                `}>
-                                    {activity.status === 'pending' ? (
-                                        <Clock className="w-5 h-5 text-yellow-600" />
-                                    ) : (
-                                        <BookOpen className="w-5 h-5 text-blue-600" />
-                                    )}
-                                </div>
-                                <div>
-                                    <h4 className="font-medium">{activity.title}</h4>
-                                    <p className="text-sm text-gray-500">{activity.type}</p>
-                                </div>
-                            </div>
-                            <div className="text-sm text-gray-500">
-                                {activity.due}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </motion.div>
-
-            {/* Progresso do Módulo */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="bg-white rounded-xl shadow-sm p-6"
-            >
-                <h3 className="text-lg font-semibold mb-4">Progresso do Módulo</h3>
-                <div className="space-y-4">
-                    <div className="relative pt-1">
-                        <div className="flex mb-2 items-center justify-between">
-                            <div>
-                                <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-100">
-                                    Apocalipse 1-4
-                                </span>
-                            </div>
-                            <div className="text-right">
-                                <span className="text-xs font-semibold inline-block text-blue-600">
-                                    75%
-                                </span>
-                            </div>
-                        </div>
-                        <div className="flex h-2 mb-4 overflow-hidden rounded bg-blue-100">
-                            <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: "75%" }}
-                                transition={{ duration: 1, ease: "easeOut" }}
-                                className="bg-blue-500"
-                            />
-                        </div>
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center space-x-4">
+                  <div className={`p-2 rounded-lg ${
+                    activity.status === 'pending' 
+                      ? 'bg-yellow-100 dark:bg-yellow-900/30' 
+                      : 'bg-blue-100 dark:bg-blue-900/30'
+                  }`}>
+                    <activity.icon className={`w-5 h-5 ${
+                      activity.status === 'pending'
+                        ? 'text-yellow-600 dark:text-yellow-400'
+                        : 'text-blue-600 dark:text-blue-400'
+                    }`} />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium dark:text-white">{activity.title}</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{activity.description}</p>
+                    <div className="flex items-center mt-1">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{activity.type}</span>
+                      <span className="mx-2 text-gray-300 dark:text-gray-600">•</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{activity.due}</span>
                     </div>
-
-                    {/* Lista de Objetivos */}
-                    <div className="space-y-2">
-                        {[
-                            { text: "Introdução ao Apocalipse", completed: true },
-                            { text: "Visão do Cristo Glorificado", completed: true },
-                            { text: "Igreja de Éfeso", completed: false },
-                            { text: "Igreja de Esmirna", completed: false },
-                        ].map((objective, index) => (
-                            <div
-                                key={index}
-                                className="flex items-center space-x-3"
-                            >
-                                <div className={`
-                  w-5 h-5 rounded-full flex items-center justify-center
-                  ${objective.completed ? 'bg-green-100' : 'bg-gray-100'}
-                `}>
-                                    {objective.completed && (
-                                        <Check className="w-3 h-3 text-green-600" />
-                                    )}
-                                </div>
-                                <span className={objective.completed ? 'text-green-600' : 'text-gray-500'}>
-                                    {objective.text}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
+                  </div>
                 </div>
+              </div>
             </motion.div>
+          ))}
         </div>
-    )
+      </div>
+
+      {/* Progresso do Módulo */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4 dark:text-white">Seu Progresso</h3>
+        <Card>
+          <div className="p-4 space-y-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Apocalipse 1-4</span>
+              <span className="text-sm font-medium text-primary-600 dark:text-primary-400">50% completo</span>
+            </div>
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <motion.div
+                className="bg-primary-500 h-2 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: '50%' }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              />
+            </div>
+            <div className="space-y-3 mt-4">
+              {progressItems.map((item, index) => (
+                <div key={item.text} className="flex items-center space-x-3">
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                    item.completed 
+                      ? 'bg-green-100 dark:bg-green-900/30' 
+                      : 'bg-gray-100 dark:bg-gray-800'
+                  }`}>
+                    {item.completed && <Check className="w-3 h-3 text-green-600 dark:text-green-400" />}
+                  </div>
+                  <span className={`text-sm ${
+                    item.completed 
+                      ? 'text-green-600 dark:text-green-400' 
+                      : 'text-gray-500 dark:text-gray-400'
+                  }`}>
+                    {item.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+      </div>
+    </div>
+  )
 }

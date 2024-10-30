@@ -10,7 +10,7 @@
 
 .dark {
   --background: #0f172a;
-  --foreground: #ededed;
+  --foreground: #e2e8f0;
   --card-background: #1e293b;
 }
 
@@ -31,10 +31,10 @@
   }
 
   .btn-primary {
-    @apply bg-primary-500 text-white hover:bg-primary-600;
+    @apply bg-primary-500 text-white hover:bg-primary-600 dark:bg-primary-600 dark:hover:bg-primary-700;
   }
 
-  .btn-secondary {
-    @apply bg-secondary-500 text-white hover:bg-secondary-600;
+  .theme-toggle {
+    @apply p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors;
   }
 }

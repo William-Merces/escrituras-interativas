@@ -3,22 +3,27 @@ import { ReactNode } from 'react';
 interface CardProps {
   title?: string;
   icon?: ReactNode;
-  gradient?: 'blue' | 'green' | 'purple';
+  gradient?: 'primary' | 'secondary';
   className?: string;
   children: ReactNode;
 }
 
-const Card = ({ title, icon, gradient = 'blue', className = '', children }: CardProps) => {
+export default function Card({ 
+  title, 
+  icon, 
+  gradient = 'primary', 
+  className = '', 
+  children 
+}: CardProps) {
   const gradientClasses = {
-    blue: 'from-blue-500 to-blue-600',
-    green: 'from-green-500 to-green-600',
-    purple: 'from-purple-500 to-purple-600'
+    primary: 'from-primary-500 to-primary-600',
+    secondary: 'from-secondary-500 to-secondary-600'
   };
 
   return (
     <div className={`card ${className}`}>
       {(title || icon) && (
-        <div className={`card-gradient ${gradientClasses[gradient]} p-4`}>
+        <div className={`bg-gradient-to-r ${gradientClasses[gradient]} rounded-t-xl p-4`}>
           <div className="flex items-center space-x-3">
             {icon && <div className="text-white">{icon}</div>}
             {title && <h3 className="text-lg font-medium text-white">{title}</h3>}
@@ -28,6 +33,4 @@ const Card = ({ title, icon, gradient = 'blue', className = '', children }: Card
       <div className="p-6">{children}</div>
     </div>
   );
-};
-
-export default Card;
+}

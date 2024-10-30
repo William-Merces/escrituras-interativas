@@ -24,12 +24,27 @@ module.exports = {
           500: '#22c55e',
           600: '#16a34a',
           700: '#15803d',
-        }
+        },
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        card: 'var(--card-background)',
       },
       backgroundColor: {
-        'card': 'var(--card-background)',
+        background: 'var(--background)',
+        card: 'var(--card-background)',
+      },
+      textColor: {
+        foreground: 'var(--foreground)',
       },
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern: /(bg|text|border|from|to)-(primary|secondary)-(50|100|500|600|700|800|900)/,
+    },
+    {
+      pattern: /dark:(bg|text|border)-(slate|gray)-(700|800|900)/,
+    },
+  ],
 }

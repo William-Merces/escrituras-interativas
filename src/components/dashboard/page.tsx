@@ -2,104 +2,59 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import LoadingSpinner from '../shared/LoadingSpinner'
-import { BookOpen, Map, MessageCircle, Activity } from 'lucide-react'
+import StatsCards from '@/components/dashboard/StatsCards'
+import DashboardNav from '@/components/dashboard/DashboardNav'
+import Overview from '@/components/dashboard-tabs/Overview'
+import Resources from '@/components/dashboard-tabs/Resources'
+import Discussions from '@/components/dashboard-tabs/Discussions'
 import Card from '@/components/ui/Card'
 
-export default function DashboardComponent() {
-    const [isLoading, setIsLoading] = useState(false)
-
-    const handleAction = async () => {
-        setIsLoading(true)
-        // Simula uma ação que leva tempo
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        setIsLoading(false)
-    }
-
-    const stats = [
-        {
-            title: 'Progresso Total',
-            value: '25%',
-            icon: Activity,
-            color: 'blue'
-        },
-        {
-            title: 'Atividades Completadas',
-            value: '12/48',
-            icon: BookOpen,
-            color: 'green'
-        },
-        {
-            title: 'Participações',
-            value: '8',
-            icon: MessageCircle,
-            color: 'purple'
-        }
-    ]
+export default function Dashboard() {
+    const [activeTab, setActiveTab] = useState('overview')
 
     return (
-        <div className="space-y-6">
-            {/* Cards de Estatísticas */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {stats.map((stat, index) => (
-                    <motion.div
-                        key={stat.title}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                    >
-                        <Card gradient={stat.color as 'blue' | 'green' | 'purple'}>
-                            <div className="flex items-center space-x-4">
-                                <div className={`p-3 rounded-full bg-${stat.color}-100`}>
-                                    <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-500">{stat.title}</p>
-                                    <p className="text-2xl font-semibold">{stat.value}</p>
-                                </div>
-                            </div>
-                        </Card>
-                    </motion.div>
-                ))}
-            </div>
-            {/* Área de Ações */}
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h3 className="text-lg font-semibold mb-4">Ações Rápidas</h3>
-                <div className="space-y-4">
-                    <button
-                        onClick={handleAction}
-                        className="w-full flex items-center justify-center space-x-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? (
-                            <LoadingSpinner />
-                        ) : (
-                            <>
-                                <BookOpen className="w-5 h-5" />
-                                <span>Continuar Estudando</span>
-                            </>
-                        )}
-                    </button>
-
-                    <button
-                        onClick={handleAction}
-                        className="w-full flex items-center justify-center space-x-2 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
-                        disabled={isLoading}
-                    >
-                        <Map className="w-5 h-5" />
-                        <span>Ver Recursos</span>
-                    </button>
-
-                    <button
-                        onClick={handleAction}
-                        className="w-full flex items-center justify-center space-x-2 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
-                        disabled={isLoading}
-                    >
-                        <MessageCircle className="w-5 h-5" />
-                        <span>Participar das Discussões</span>
-                    </button>
+        <div className="space-y-8">
+            {/* Progress Banner */}
+            <Card className="bg-gradient-to-r from-primary-500 to-primary-600 text-white">
+                <div className="p-6">
+                    <h2 className="text-2xl font-bold mb-2">Bem-vindo de volta!</h2>
+                    <p className="text-primary-100">Continue de onde parou: Apocalipse 2:1-7</p>
+                    <div className="mt-4">
+                        <div className="w-full bg-primary-400/30 rounded-full h-2">
+                            <motion.div
+                                className="bg-white rounded-full h-2"
+                                initial={{ width: 0 }}
+                                animate={{ width: '25%' }}
+                                transition={{ duration: 1 }}
+                            />
+                        </div>
+                        <div className="flex justify-between mt-2 text-sm">
+                            <span>Progresso geral</span>
+                            <span>25%</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </Card>
+
+            {/* Stats Cards */}
+            <StatsCards />
+
+            {/* Main Content */}
+            <Card>
+                <DashboardNav activeTab={activeTab} onTabChange={setActiveTab} />
+                <div className="p-6">
+                    <motion.div
+                        key={activeTab}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        {activeTab === 'overview' && <Overview />}
+                        {activeTab === 'resources' && <Resources />}
+                        {activeTab === 'discussions' && <Discussions />}
+                    </motion.div>
+                </div>
+            </Card>
         </div>
     )
 }
