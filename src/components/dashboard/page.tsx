@@ -4,10 +4,11 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import LoadingSpinner from '../shared/LoadingSpinner'
 import { BookOpen, Map, MessageCircle, Activity } from 'lucide-react'
+import Card from '@/components/ui/Card'
 
 export default function DashboardComponent() {
     const [isLoading, setIsLoading] = useState(false)
-    
+
     const handleAction = async () => {
         setIsLoading(true)
         // Simula uma ação que leva tempo
@@ -46,21 +47,21 @@ export default function DashboardComponent() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="bg-white p-6 rounded-lg shadow-sm"
                     >
-                        <div className="flex items-center space-x-4">
-                            <div className={`p-3 rounded-full bg-${stat.color}-100`}>
-                                <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
+                        <Card gradient={stat.color as 'blue' | 'green' | 'purple'}>
+                            <div className="flex items-center space-x-4">
+                                <div className={`p-3 rounded-full bg-${stat.color}-100`}>
+                                    <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-500">{stat.title}</p>
+                                    <p className="text-2xl font-semibold">{stat.value}</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-sm text-gray-500">{stat.title}</p>
-                                <p className="text-2xl font-semibold">{stat.value}</p>
-                            </div>
-                        </div>
+                        </Card>
                     </motion.div>
                 ))}
             </div>
-
             {/* Área de Ações */}
             <div className="bg-white p-6 rounded-lg shadow-sm">
                 <h3 className="text-lg font-semibold mb-4">Ações Rápidas</h3>
